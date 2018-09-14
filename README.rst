@@ -57,3 +57,10 @@ but the techniques investigated should be usable in similar contexts.
 
 Documentation, installation and instructions are at
 https://editing-django-models-in-the-frontend.readthedocs.io
+
+License
+-------
+Copyright &copy; 2018 Mario Orlandi.
+
+MIT licensed.
+
