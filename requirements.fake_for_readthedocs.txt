@@ -1,0 +1,1 @@
+# see https://stackoverflow.com/questions/48224674/how-can-i-get-readthedocs-org-build-to-ignore-my-requirement-txt
