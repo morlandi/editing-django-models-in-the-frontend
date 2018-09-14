@@ -36,9 +36,7 @@ Topics
    topics/references
    topics/enhancements
 
-Indices and tables
-==================
+Search docs
+===========
 
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
