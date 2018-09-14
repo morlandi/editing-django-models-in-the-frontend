@@ -53,5 +53,6 @@ urlpatterns = [
         name="album-add"),
     path('album/<uuid:pk>/change/',
         views.generic_edit_view,
-        {'model_form_class': forms.AlbumEditForm}, name="album-change"),
+        {'model_form_class': forms.AlbumEditForm},
+        name="album-change"),
 ]

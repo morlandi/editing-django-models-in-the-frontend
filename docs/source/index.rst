@@ -35,6 +35,7 @@ Topics
    topics/edit_any_django_model
    topics/enhancements
    topics/references
+   topics/contributing
 
 Search docs
 ===========
