@@ -4,7 +4,7 @@ Creating and updating a Django Model in the front-end
 We can now apply what we've built so far to edit a specific Django model
 from the front-end.
 
-.. note:: Check sample code at:  (7) Creating and updating a Django Model in the front-end` in the sample project
+.. note:: Check sample code at:  (7) Creating and updating a Django Model in the front-end
 
 
 Creating a new model
@@ -61,6 +61,28 @@ Note that we're using a generic template called `frontend/includes/generic_form_
 
 Chances are we'll reuse it unmodified for other Models as well.
 
+.. code:: html
+
+    {% load i18n bootstrap3 %}
+
+    <div class="row">
+        <div class="col-sm-8">
+
+            <form method="post" class="form" novalidate>
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <input type="hidden" name="object_id" value="{{ object.id|default:'' }}">
+                {% buttons %}
+                    <div class="form-submit-row">
+                        <button type="submit" class="btn btn-primary">
+                            {% bootstrap_icon "star" %} {% trans 'Send' %}
+                        </button>
+                    </div>
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+
 On successful creation, we might want to update the user interface;
 in the example, for simplicity, we just reload the entire page,
 but also display the new object id retrieved from the hidden field 'object_id' of the form;
@@ -82,7 +104,8 @@ this could be conveniently used for in-place page updating.
 Updating an existing object
 ---------------------------
 
-We treat the update of an existing object in a similar fashion.
+We treat the update of an existing object in a similar fashion,
+but binding the form to the specific database record.
 
 The view:
 
@@ -131,7 +154,7 @@ and the form:
                 'notes',
             ]
 
-Finally, here's the object id retrival aftee successful completion:
+Finally, here's the object id retrival after successful completion:
 
 .. code:: javascript
 
@@ -152,8 +175,8 @@ In the code above, we can detect at list three redundancies:
 
 - the two model forms are identical
 - the two views are similar
-- and, last but not least, we might try to generalize the views for reuse with other models
+- and, last but not least, we might try to generalize the views for reuse with any Django model
 
 We'll investigate all these opportunities later on; nonetheless, it's nice to
 have a simple snippet available for copy and paste to be used as a starting point
-anytime a specific customization is required.
+anytime a specific customization is in order.

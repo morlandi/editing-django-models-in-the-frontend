@@ -44,9 +44,14 @@ urlpatterns = [
     path('artist/create/', views.artist_create, name="artist-create"),
     path('artist/<uuid:pk>/update/', views.artist_update, name="artist-update"),
 
-    path('artist/add/', views.artist_edit, {'pk': None, }, name="artist-add"),
+    path('artist/add/', views.artist_edit, name="artist-add"),
     path('artist/<uuid:pk>/change/', views.artist_edit, name="artist-change"),
 
-    path('album/add/', views.generic_edit_view, {'pk': None, 'model_form_class': forms.AlbumEditForm}, name="album-add"),
-    path('album/<uuid:pk>/change/', views.generic_edit_view, {'model_form_class': forms.AlbumEditForm}, name="album-change"),
+    path('album/add/',
+        views.generic_edit_view,
+        {'model_form_class': forms.AlbumEditForm},
+        name="album-add"),
+    path('album/<uuid:pk>/change/',
+        views.generic_edit_view,
+        {'model_form_class': forms.AlbumEditForm}, name="album-change"),
 ]

@@ -33,8 +33,8 @@ Topics
    topics/edit_a_django_model
    topics/edit_a_django_model_2
    topics/edit_any_django_model
-   topics/references
    topics/enhancements
+   topics/references
 
 Search docs
 ===========

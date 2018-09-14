@@ -4,6 +4,18 @@ Modals with simple content
 Possiamo riempire il contenuto della dialog invocando via Ajax una vista che
 restituisca l'opportuno frammento HTML:
 
+.. code:: html
+
+    <a href=""
+       data-action="{% url 'frontend:simple-content' %}"
+       data-title="Simple content"
+       data-subtitle="Modal content is obtained via Ajax call"
+       data-icon="fa-keyboard-o"
+       data-button-save-label="Save"
+       onclick="openMyModal(event); return false;">
+        <i class="fa fa-keyboard-o"></i> Modal with simple content
+    </a>
+
 .. code:: javascript
 
     <script language="javascript">
@@ -28,8 +40,12 @@ restituisca l'opportuno frammento HTML:
 Si osservi come abbiamo specificato l'url della view remota nell'attributo
 "data-action" del trigger.
 
-Un limite di questa semplice soluzione e' che non siamo in grado di rilevare
-eventuali errori del server, e quindi in caso di errore la dialog verrebbe comunque
+Questa soluzione e' preferibile rispetto all'utilizzo di `href` per evitare che,
+in caso di errori javascript il link, il link invochi direttamente la view,
+compromettendo quindi l'intera pagina.
+
+Un limite del codice precedente e' che non siamo in grado di rilevare
+eventuali errori del server, nel qual caso la dialog verrebbe comunque
 aperta (con contenuto vuoto).
 
 Il problema viene facilmente superato invocando direttamente $.ajax() anziche'

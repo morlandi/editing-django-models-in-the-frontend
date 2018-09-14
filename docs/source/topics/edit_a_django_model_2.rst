@@ -13,7 +13,7 @@ an existing one is now straitforward; see `artist_edit()` belows:
     ################################################################################
     # A single "edit" view to either create a new Artist or update an existing one
 
-    def artist_edit(request, pk):
+    def artist_edit(request, pk=None):
 
         # Retrieve object
         if pk is None:
@@ -57,16 +57,18 @@ an existing one is now straitforward; see `artist_edit()` belows:
             'form': form,
         })
 
-When "pk" is None, we switch to "add" mode, otherwise we retrieve the corresponding
-object to change it.
+When "pk" is None, we switch to `add` mode, otherwise we retrieve the corresponding
+object to `change` it.
 
-The urls are organized as follows:
+Both "add" and "change" URL patterns point to the same view,
+but the first one doesn’t capture anything from the URL and the default value
+of None will be used for `pk`.
 
 .. code:: python
 
     urlpatterns = [
         ...
-        path('artist/add/', views.artist_edit, {'pk': None, }, name="artist-add"),
+        path('artist/add/', views.artist_edit, name="artist-add"),
         path('artist/<uuid:pk>/change/', views.artist_edit, name="artist-change"),
         ...
     ]

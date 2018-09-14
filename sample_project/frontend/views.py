@@ -159,7 +159,7 @@ def artist_update(request, pk):
 ################################################################################
 # A single "edit" view to either create a new Artist or update an existing one
 
-def artist_edit(request, pk):
+def artist_edit(request, pk=None):
 
     # Retrieve object
     if pk is None:
@@ -208,7 +208,7 @@ def artist_edit(request, pk):
 # A fully generic "edit" view to either create a new object or update an existing one;
 # works with any Django model
 
-def generic_edit_view(request, pk, model_form_class):
+def generic_edit_view(request, model_form_class, pk=None):
 
     model_class = model_form_class._meta.model
     app_label = model_class._meta.app_label

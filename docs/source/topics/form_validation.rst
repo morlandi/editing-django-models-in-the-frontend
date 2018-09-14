@@ -26,8 +26,8 @@ the HTML received**:
 - otherwise, user interaction is completed, and we can finally close the modal
 
 
-We'll obtain all this (and more) just calling a single helper function **formAjaxSubmit()**
-which I'll explain in detail later.
+We'll obtain all this (and more) with a javacript helper function **formAjaxSubmit()**
+which I'll explain later in details.
 
 .. code:: javascript
 
@@ -35,7 +35,7 @@ which I'll explain in detail later.
 
         function openMyModal(event) {
             var modal = initModalDialog(event, '#modal_generic');
-            var url = $(event.target).attr('href');
+            var url = $(event.target).data('action');
             $.ajax({
                 type: "GET",
                 url: url
@@ -59,7 +59,7 @@ which I'll explain in detail later.
 .. figure:: /_static/images/form_validation_2.png
    :scale: 80 %
 
-   When form did not validate, we keep the dialog open
+   While the form does not validate, we keep the dialog open
 
 Again, the very same view can also be used to render a standalone page:
 
@@ -105,7 +105,7 @@ Here's the full code:
 
                 var url = $(this).attr('action') || action;
 
-                // serialize the form’s content and sent via an AJAX call
+                // serialize the form’s content and send via an AJAX call
                 // using the form’s defined action and method
                 $.ajax({
                     type: $(this).attr('method'),
@@ -131,6 +131,7 @@ Here's the full code:
                         }
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
+                        console.log('SERVER ERROR: ' + thrownError);
                     },
                     complete: function() {
                         header.removeClass('loading');
@@ -161,16 +162,16 @@ As anticipated, the most important action is to hijack form submission::
             data: $(this).serialize(),
             ...
 
-Note tha if the form specifies an action, we use it as end-point of the ajax call;
-if not, we're using the same view for both rendering and form processing,
-so we can reuse the original url instead::
+If the form specifies an action, we use it as the end-point of the ajax call;
+if not (which is the most common case), we're using the same view for both
+rendering and form processing, and we can reuse the original url instead::
 
     var url = $(this).attr('action') || action;
 
 Secondly, we need to detect any form errors after submission; see the "success"
 callback after the Ajax call for details.
 
-We also need to cope with the submit button embedded in the form.
+Finally, we need to take care of the submit button embedded in the form.
 
 While it's useful and necessary for the rendering of a standalone page, it's
 rather disturbing in the modal dialog:
@@ -191,19 +192,21 @@ Here's the relevant code::
         });
     }
 
-During content loading, we add a "loading" class to the dialog header, making
-a spinner icon visible.
+During content loading, we add a "loading" class to the dialog header,
+to make a spinner icon visible until we're ready to either update or close the modal.
 
 
-Optional callbacks
-------------------
+Optional callbacks supported by formAjaxSubmit()
+------------------------------------------------
 
-- cbAfterLoad: called every time new content has been loaded; you can use it
-  to bind more form controls
+    cbAfterLoad
+        called every time new content has been loaded;
+        you can use it to bind form controls when required
 
-- cbAfterSuccess: called after successfull submission; at this point the modal
-  has been closed, but the bounded form might still contain useful informations
-  that you can grab for later inspection
+    cbAfterSuccess
+        called after successfull submission; at this point the modal
+        has been closed, but the bounded form might still contain useful informations
+        that you can grab for later inspection
 
 Sample usage::
 

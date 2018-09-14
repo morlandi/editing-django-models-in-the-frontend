@@ -15,7 +15,7 @@ Yes sir !
     # A fully generic "edit" view to either create a new object or update an existing one;
     # works with any Django model
 
-    def generic_edit_view(request, pk, model_form_class):
+    def generic_edit_view(request, model_form_class, pk=None):
 
         model_class = model_form_class._meta.model
         app_label = model_class._meta.app_label
@@ -64,16 +64,21 @@ Yes sir !
             'form': form,
         })
 
-Adding a ModelForm specification at run-time is all what we need;
-from it, we deduct the Model that's it.
-
-Just remember to supply a ModelForm in the urls and you've done:
+Adding an appropriate ModelForm in the URL pattern is all what we need;
+from that, the view will deduce the Model and other related details.
 
 .. code:: python
 
     urlpatterns = [
         ...
-        path('album/<uuid:pk>/change/', views.generic_edit_view, {'model_form_class': forms.AlbumEditForm}, name="album-change"),
+        path('album/add/',
+            views.generic_edit_view,
+            {'model_form_class': forms.AlbumEditForm},
+            name="album-add"),
+        path('album/<uuid:pk>/change/',
+            views.generic_edit_view,
+            {'model_form_class': forms.AlbumEditForm},
+            name="album-change"),
         ...
     ]
 

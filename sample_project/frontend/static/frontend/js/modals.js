@@ -78,7 +78,7 @@ function formAjaxSubmit(modal, action, cbAfterLoad, cbAfterSuccess) {
 
         var url = $(this).attr('action') || action;
 
-        // serialize the form’s content and sent via an AJAX call
+        // serialize the form’s content and send via an AJAX call
         // using the form’s defined action and method
         $.ajax({
             type: $(this).attr('method'),
@@ -86,11 +86,11 @@ function formAjaxSubmit(modal, action, cbAfterLoad, cbAfterSuccess) {
             data: $(this).serialize(),
             success: function(xhr, ajaxOptions, thrownError) {
 
-                // If the server sends back a successful response,
-                // we need to further check the HTML received
-
                 // update the modal body with the new form
                 $(modal).find('.modal-body').html(xhr);
+
+                // If the server sends back a successful response,
+                // we need to further check the HTML received
 
                 // If xhr contains any field errors,
                 // the form did not validate successfully,
@@ -104,6 +104,7 @@ function formAjaxSubmit(modal, action, cbAfterLoad, cbAfterSuccess) {
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
+                console.log('SERVER ERROR: ' + thrownError);
             },
             complete: function() {
                 header.removeClass('loading');
