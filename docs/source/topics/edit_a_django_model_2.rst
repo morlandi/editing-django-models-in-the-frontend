@@ -103,7 +103,13 @@ any dialog which submits an arbitrary form):
             if ($.type(modal) == 'string') {
                 modal = initModalDialog(event, modal);
             }
+
             var url = $(event.target).data('action');
+            if (!url) {
+                console.log('ERROR: openModalDialogWithForm() could not retrieve action from event');
+                return;
+            }
+
             $.ajax({
                 type: 'GET',
                 url: url

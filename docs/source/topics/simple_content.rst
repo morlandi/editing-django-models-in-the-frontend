@@ -42,7 +42,8 @@ Si osservi come abbiamo specificato l'url della view remota nell'attributo
 
 Questa soluzione e' preferibile rispetto all'utilizzo di `href` per evitare che,
 in caso di errori javascript il link, il link invochi direttamente la view,
-compromettendo quindi l'intera pagina.
+compromettendo quindi l'intera pagina o inserendo nel corpo della dialog
+contenuti inappropriati.
 
 Un limite del codice precedente e' che non siamo in grado di rilevare
 eventuali errori del server, nel qual caso la dialog verrebbe comunque
