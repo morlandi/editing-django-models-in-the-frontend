@@ -25,7 +25,7 @@
                             <td>
                                 <a href=""
                                    data-action="{% url 'frontend:artist-change' artist.id %}"
-                                   onclick="onObjectEdit(event, null, afterArtistEditSuccess); return false;"
+                                   onclick="onObjectEdit(event, '#modal_generic', null, afterArtistEditSuccess); return false;"
                                    data-title="Change artist: {{ artist }}"
                                 >
                                     <i class="fa fa-edit"></i> Edit
@@ -42,7 +42,7 @@
                     href=""
                     data-action="{% url 'frontend:artist-add' %}"
                     data-title="New artist"
-                    onclick="onObjectEdit(event, null, afterArtistEditSuccess); return false;"
+                    onclick="onObjectEdit(event, '#modal_generic', null, afterArtistEditSuccess); return false;"
                     type="button"class="btn btn-primary">
                     New
                 </button>

@@ -46,8 +46,8 @@ function initModalDialog(event, element) {
 }
 
 
-function openModalDialog(event, element) {
-    var modal = initModalDialog(event, element);
+function openModalDialog(event, modal_element) {
+    var modal = initModalDialog(event, modal_element);
     modal.modal('show');
 }
 
@@ -114,18 +114,18 @@ function formAjaxSubmit(modal, action, cbAfterLoad, cbAfterSuccess) {
 }
 
 
-function onObjectEdit(event, cbAfterLoad, cbAfterSuccess) {
-    var modal = initModalDialog(event, '#modal_generic');
+function onObjectEdit(event, modal_element, cbAfterLoad, cbAfterSuccess) {
+    var modal = initModalDialog(event, modal_element);
     var url = $(event.target).data('action');
     $.ajax({
-        type: "GET",
+        type: 'GET',
         url: url
     }).done(function(data, textStatus, jqXHR) {
         modal.find('.modal-body').html(data);
         modal.modal('show');
         formAjaxSubmit(modal, url, cbAfterLoad, cbAfterSuccess);
     }).fail(function(jqXHR, textStatus, errorThrown) {
-        alert("SERVER ERROR: " + errorThrown);
+        alert('SERVER ERROR: ' + errorThrown);
     });
 }
 

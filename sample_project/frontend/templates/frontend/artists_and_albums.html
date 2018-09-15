@@ -26,7 +26,7 @@
                             <td>
                                 <a href=""
                                    data-action="{% url 'frontend:artist-change' row.id %}"
-                                   onclick="onObjectEdit(event, null, afterObjectEditSuccess); return false;"
+                                   onclick="onObjectEdit(event, '#modal_generic', null, afterObjectEditSuccess); return false;"
                                    data-title="Change artist: {{ row }}"
                                 >
                                     <i class="fa fa-edit"></i> Edit
@@ -43,7 +43,7 @@
                     href=""
                     data-action="{% url 'frontend:artist-add' %}"
                     data-title="New artist"
-                    onclick="onObjectEdit(event, null, afterObjectEditSuccess); return false;"
+                    onclick="onObjectEdit(event, '#modal_generic', null, afterObjectEditSuccess); return false;"
                     type="button"class="btn btn-primary">
                     New
                 </button>
@@ -75,7 +75,7 @@
                             <td>
                                 <a href=""
                                    data-action="{% url 'frontend:album-change' row.id %}"
-                                   onclick="onObjectEdit(event, null, afterObjectEditSuccess); return false;"
+                                   onclick="onObjectEdit(event, '#modal_generic', null, afterObjectEditSuccess); return false;"
                                    data-title="Change album: {{ row }}"
                                 >
                                     <i class="fa fa-edit"></i> Edit
@@ -99,7 +99,7 @@
                     href=""
                     data-action="{% url 'frontend:album-add' %}"
                     data-title="New album"
-                    onclick="onObjectEdit(event, null, afterObjectEditSuccess); return false;"
+                    onclick="onObjectEdit(event, '#modal_generic', null, afterObjectEditSuccess); return false;"
                     type="button"class="btn btn-primary">
                     New
                 </button>

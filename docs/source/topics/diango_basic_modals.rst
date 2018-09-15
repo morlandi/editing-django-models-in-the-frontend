@@ -64,11 +64,11 @@ nel template della pagina principale, e quindi utilizzandone il contesto:
 
     <script language="javascript">
 
-        function initModalDialog(event, element) {
+        function initModalDialog(event, modal_element) {
             /*
                 You can customize the modal layout specifing optional "data" attributes
                 in the element (either <a> or <button>) which triggered the event;
-                "element" identifies the modal HTML element.
+                "modal_element" identifies the modal HTML element.
 
                 Sample call:
 
@@ -82,7 +82,7 @@ nel template della pagina principale, e quindi utilizzandone il contesto:
                     <i class="fa fa-keyboard-o"></i> Open generic modal (no contents)
                 </a>
             */
-            var modal = $(element);
+            var modal = $(modal_element);
             var target = $(event.target);
 
             var title = target.data('title') || '';
@@ -102,8 +102,8 @@ nel template della pagina principale, e quindi utilizzandone il contesto:
             return modal;
         }
 
-        function openModalDialog(event, element) {
-            var modal = initModalDialog(event, element);
+        function openModalDialog(event, modal_element) {
+            var modal = initModalDialog(event, modal_element);
             modal.modal('show');
         }
 

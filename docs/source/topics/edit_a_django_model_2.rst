@@ -96,18 +96,18 @@ way, with no reference to the specific Model in use:
 
     <script language="javascript">
 
-        function onObjectEdit(event, cbAfterLoad, cbAfterSuccess) {
-            var modal = initModalDialog(event, '#modal_generic');
+        function onObjectEdit(event, modal_element, cbAfterLoad, cbAfterSuccess) {
+            var modal = initModalDialog(event, modal_element);
             var url = $(event.target).data('action');
             $.ajax({
-                type: "GET",
+                type: 'GET',
                 url: url
             }).done(function(data, textStatus, jqXHR) {
                 modal.find('.modal-body').html(data);
                 modal.modal('show');
                 formAjaxSubmit(modal, url, cbAfterLoad, cbAfterSuccess);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                alert("SERVER ERROR: " + errorThrown);
+                alert('SERVER ERROR: ' + errorThrown);
             });
         }
 
