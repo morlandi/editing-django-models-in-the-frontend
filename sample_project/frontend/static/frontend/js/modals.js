@@ -1,11 +1,11 @@
 'use strict';
 
 
-function initModalDialog(event, element) {
+function initModalDialog(event, modal_element) {
     /*
         You can customize the modal layout specifing optional "data" attributes
         in the element (either <a> or <button>) which triggered the event;
-        "element" identifies the modal HTML element.
+        "modal_element" identifies the modal HTML element.
 
         Sample call:
 
@@ -19,7 +19,7 @@ function initModalDialog(event, element) {
             <i class="fa fa-keyboard-o"></i> Open generic modal (no contents)
         </a>
     */
-    var modal = $(element);
+    var modal = $(modal_element);
     var target = $(event.target);
 
     var title = target.data('title') || '';
@@ -46,8 +46,12 @@ function initModalDialog(event, element) {
 }
 
 
-function openModalDialog(event, modal_element) {
-    var modal = initModalDialog(event, modal_element);
+function openModalDialog(event, modal) {
+    // If "modal" is a selector, initialize a modal object,
+    // otherwise just use it
+    if ($.type(modal) == 'string') {
+        modal = initModalDialog(event, modal);
+    }
     modal.modal('show');
 }
 
@@ -114,8 +118,12 @@ function formAjaxSubmit(modal, action, cbAfterLoad, cbAfterSuccess) {
 }
 
 
-function onObjectEdit(event, modal_element, cbAfterLoad, cbAfterSuccess) {
-    var modal = initModalDialog(event, modal_element);
+function openModalDialogWithForm(event, modal, cbAfterLoad, cbAfterSuccess) {
+    // If "modal" is a selector, initialize a modal object,
+    // otherwise just use it
+    if ($.type(modal) == 'string') {
+        modal = initModalDialog(event, modal);
+    }
     var url = $(event.target).data('action');
     $.ajax({
         type: 'GET',

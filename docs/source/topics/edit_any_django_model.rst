@@ -89,7 +89,7 @@ In the page template, we bind the links to the views as follows:
     <!-- Change -->
     <a href=""
        data-action="{% url 'frontend:album-change' row.id %}"
-       onclick="onObjectEdit(event, '#modal_generic', null, afterObjectEditSuccess); return false;"
+       onclick="openModalDialogWithForm(event, '#modal_generic', null, afterObjectEditSuccess); return false;"
        data-title="Change album: {{ row }}"
     >
         <i class="fa fa-edit"></i> Edit
@@ -102,7 +102,7 @@ In the page template, we bind the links to the views as follows:
         href=""
         data-action="{% url 'frontend:album-add' %}"
         data-title="New album"
-        onclick="onObjectEdit(event, '#modal_generic', null, afterObjectEditSuccess); return false;"
+        onclick="openModalDialogWithForm(event, '#modal_generic', null, afterObjectEditSuccess); return false;"
         type="button"class="btn btn-primary">
         New
     </button>

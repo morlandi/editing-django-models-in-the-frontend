@@ -90,14 +90,19 @@ We also share a common form:
             ]
 
 The javascript handler which opens the dialog can be refactored in a completely generic
-way, with no reference to the specific Model in use:
+way, with no reference to the specific Model in use (and is also reusable for
+any dialog which submits an arbitrary form):
 
 .. code:: javascript
 
     <script language="javascript">
 
-        function onObjectEdit(event, modal_element, cbAfterLoad, cbAfterSuccess) {
-            var modal = initModalDialog(event, modal_element);
+        function openModalDialogWithForm(event, modal, cbAfterLoad, cbAfterSuccess) {
+            // If "modal" is a selector, initialize a modal object,
+            // otherwise just use it
+            if ($.type(modal) == 'string') {
+                modal = initModalDialog(event, modal);
+            }
             var url = $(event.target).data('action');
             $.ajax({
                 type: 'GET',
