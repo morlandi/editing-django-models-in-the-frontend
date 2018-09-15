@@ -99,6 +99,9 @@ nel template della pagina principale, e quindi utilizzandone il contesto:
             modal.find('.modal-footer .btn-save').text(button_save_label);
             modal.find('.modal-body').html('');
 
+            // Annotate with target (just in case)
+            modal.data('target', target);
+
             return modal;
         }
 
