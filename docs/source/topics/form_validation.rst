@@ -171,8 +171,7 @@ rendering and form processing, and we can reuse the original url instead::
 Secondly, we need to detect any form errors after submission; see the "success"
 callback after the Ajax call for details.
 
-Finally, we need to take care of the submit button embedded in the form.
-
+Finally, we also take care of the submit button embedded in the form.
 While it's useful and necessary for the rendering of a standalone page, it's
 rather disturbing in the modal dialog:
 
@@ -192,7 +191,7 @@ Here's the relevant code::
         });
     }
 
-During content loading, we add a "loading" class to the dialog header,
+One last detail: during content loading, we add a "loading" class to the dialog header,
 to make a spinner icon visible until we're ready to either update or close the modal.
 
 

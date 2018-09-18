@@ -14,6 +14,12 @@ evolve our code to provide similar functionalities:
         Check https://github.com/lincolnloop/django-dynamic-raw-id/
         and https://www.abidibo.net/blog/2015/02/06/pretty-raw_id_fields-django-salmonella-and-django-grappelli/
 
+    Support for inlines
+
+    Support for autocompletion
+
+    Aids for deleting the object (and eventually all related objects)
+
 Minor issues:
 
 - Add a localized datepicker in the examples

@@ -37,7 +37,14 @@ Topics
    topics/references
    topics/contributing
 
+Sample code
+-----------
+
+A sample Django project which uses all techniques discussed here is available on Github:
+
+https://github.com/morlandi/editing-django-models-in-the-frontend
+
 Search docs
-===========
+-----------
 
 * :ref:`search`

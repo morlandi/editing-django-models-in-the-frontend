@@ -85,7 +85,8 @@ Chances are we'll reuse it unmodified for other Models as well.
 
 On successful creation, we might want to update the user interface;
 in the example, for simplicity, we just reload the entire page,
-but also display the new object id retrieved from the hidden field 'object_id' of the form;
+but before doing that we also display with an alert the new object id retrieved
+from the hidden field 'object_id' of the form;
 this could be conveniently used for in-place page updating.
 
 .. code:: javascript
