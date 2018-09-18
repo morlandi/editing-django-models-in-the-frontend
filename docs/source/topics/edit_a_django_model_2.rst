@@ -57,7 +57,7 @@ an existing one is now straitforward; see `artist_edit()` belows:
             'form': form,
         })
 
-When "pk" is None, we switch to `add` mode, otherwise we retrieve the corresponding
+When "pk" is None, we act in `add` mode, otherwise we retrieve the corresponding
 object to `change` it.
 
 Both "add" and "change" URL patterns point to the same view,
