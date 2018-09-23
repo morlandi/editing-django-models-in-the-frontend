@@ -8,7 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from backend.models import Artist
 from backend.models import Album
+from backend.models import Song
 from .utils import get_object_by_uuid_or_404
+from .forms import get_model_form_class
 from .forms import SimpleForm
 from .forms import ArtistCreateForm
 from .forms import ArtistUpdateForm
@@ -85,6 +87,15 @@ def artists_and_albums(request):
     return render(request, template_name, {
         'artists': Artist.objects.all(),
         'albums': Album.objects.all(),
+    })
+
+
+@login_required
+def songs(request):
+    template_name = 'frontend/songs.html'
+    return render(request, template_name, {
+        'model': Song,
+        'objects': Song.objects.all(),
     })
 
 
@@ -202,6 +213,17 @@ def artist_edit(request, pk=None):
         'object': object,
         'form': form,
     })
+
+
+################################################################################
+# Edit any object
+
+def edit_object(request, app_label, model_name, pk=None):
+    """
+    Choose a suitable ModelForm class, than invoke generic_edit_view()
+    """
+    model_form_class = get_model_form_class(app_label, model_name)
+    return generic_edit_view(request, model_form_class, pk)
 
 
 ################################################################################

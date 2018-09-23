@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load frontend_tags %}
+
+
+{% block content %}
+
+    <div class="row">
+
+        {% block title %}
+        {% endblock title %}
+
+        <div class="col-sm-6">
+            <h1>{{ model|model_verbose_name_plural }}</h1>
+            {% if not objects %}
+                <div>No objects available yet</div>
+            {% else %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tools</th>
+                            {% block table_headers %}
+                            {% endblock table_headers %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in objects %}
+                        <tr>
+                            <td>
+                                <a href=""
+                                   data-action="{{model|change_model_url:object.id}}"
+                                   onclick="openModalDialogWithForm(event, '#modal_generic', null, function() {location.reload(true);}); return false;"
+                                   data-title="Update {{ model|model_verbose_name }}: {{ object }}"
+                                >
+                                    <i class="fa fa-edit"></i> Edit
+                                </a>
+                                |
+                                <a href="{{model|change_model_url:object.id}}">
+                                    <i class="fa fa-edit"></i> Edit (standalone)
+                                </a>
+                            </td>
+                            {% block table_row %}
+                            {% endblock table_row %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            <div>
+                <button
+                    href=""
+                    data-action="{{model|add_model_url}}"
+                    data-title="New {{ model|model_verbose_name }}"
+                    onclick="openModalDialogWithForm(event, '#modal_generic', null, function() {location.reload(true);}); return false;"
+                    type="button"class="btn btn-primary">
+                    New
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+

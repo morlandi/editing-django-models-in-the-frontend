@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils import timezone
 from .models import Artist
 from .models import Album
+from .models import Song
 
 
 class BaseModelAdmin(admin.ModelAdmin):
@@ -21,4 +22,9 @@ class ArtistAdmin(BaseModelAdmin):
 
 @admin.register(Album)
 class AlbumAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(Song)
+class SongAdmin(BaseModelAdmin):
     pass

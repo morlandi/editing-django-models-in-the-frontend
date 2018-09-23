@@ -36,6 +36,7 @@ urlpatterns = [
     path('artists/', views.artists, name="artists"),
     path('artists2/', views.artists2, name="artists2"),
     path('artists_and_albums/', views.artists_and_albums, name="artists-and-albums"),
+    path('songs/', views.songs, name="songs"),
 
     path('simple-content', views.simple_content, name="simple-content"),
     path('simple-content-forbidden', views.simple_content_forbidden, name="simple-content-forbidden"),
@@ -55,4 +56,8 @@ urlpatterns = [
         views.generic_edit_view,
         {'model_form_class': forms.AlbumEditForm},
         name="album-change"),
+
+    # Edit any object
+    path('object/<str:app_label>/<str:model_name>/add/', views.edit_object, name="object-add"),
+    path('object/<str:app_label>/<str:model_name>/<uuid:pk>/change/', views.edit_object, name="object-change"),
 ]

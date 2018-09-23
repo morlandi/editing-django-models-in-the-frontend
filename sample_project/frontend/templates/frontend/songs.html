@@ -1,0 +1,20 @@
+{% extends "frontend/objects_table.html" %}
+
+
+{% block title %}
+    <h2>(10) Front-end generic helpers to work with any Model</h2>
+{% endblock title %}
+
+
+{% block table_headers %}
+    <th>Album</th>
+    <th>Position</th>
+    <th>Description</th>
+{% endblock table_headers %}
+
+
+{% block table_row %}
+    <th>{{ object.album }}</th>
+    <th>{{ object.position }}</th>
+    <th>{{ object.description }}</th>
+{% endblock table_row %}

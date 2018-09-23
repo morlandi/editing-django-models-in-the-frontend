@@ -33,6 +33,7 @@ Topics
    topics/edit_a_django_model
    topics/edit_a_django_model_2
    topics/edit_any_django_model
+   topics/frontend_generic_helpers
    topics/enhancements
    topics/references
    topics/contributing

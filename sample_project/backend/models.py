@@ -38,3 +38,13 @@ class Album(BaseModel):
 
     class Meta(BaseModel.Meta):
         abstract = False
+
+
+class Song(BaseModel):
+
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, null=False, blank=False)
+    position = models.IntegerField(default=0, null=False, blank=False)
+
+    class Meta(BaseModel.Meta):
+        abstract = False
+        ordering = ['position', ]
