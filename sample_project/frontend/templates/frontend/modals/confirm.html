@@ -8,12 +8,14 @@
                     <span class="sr-only">{% trans 'Close' %}</span>
                 </button>
                 <div class="title-wrapper">
-                    <span class="modal-title"></span>
+                    <i class="fa fa-question-circle modal-icon"></i>
+                    <span class="modal-title">{% trans 'Confirmation required' %}</span>
                 </div>
                 <small class="modal-subtitle font-bold"></small>
             </div>
             <div class="modal-body">
-                <h1>Are you sure ?</h1>
+                <p></p>
+                <h1>{% trans 'Are you sure ?' %}</h1>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">{% trans 'No' %}</button>

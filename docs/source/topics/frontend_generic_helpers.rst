@@ -190,6 +190,8 @@ e riscrivere il template piu' semplicemente come segue::
 Deleting an object
 ------------------
 
+.. figure:: /_static/images/objects_table.png
+
 Associamo all'url::
 
     path('object/<str:app_label>/<str:model_name>/<uuid:pk>/delete/', views.delete_object, name="object-delete"),
@@ -220,7 +222,7 @@ la conferma dell'utente:
 
 .. code:: javascript
 
-    function deleteRemoteObject(url, title, afterObjectDeleteCallback) {
+    function confirmRemoteAction(url, title, afterObjectDeleteCallback) {
         var modal = $('#modal_confirm');
         modal.find('.modal-title').text(title);
         modal.find('.btn-yes').off().on('click', function() {
@@ -242,7 +244,7 @@ la conferma dell'utente:
 e quindi, nel template::
 
     <a href=""
-       onclick="deleteRemoteObject('{{object|delete_object_url}}', 'Deleting {{object}}', afterObjectDelete); return false;">
+       onclick="confirmRemoteAction('{{object|delete_object_url}}', 'Deleting {{object}}', afterObjectDelete); return false;">
         <i class="fa fa-eraser"></i> Delete
     </a>
 
@@ -290,14 +292,120 @@ Qui stiamo supponendo che il Model metta a disposizione un opportuno metodo **cl
             obj.save()
             return obj
 
-La stessa funzione javascript deleteRemoteObject() utilizzata in precedenza puo' essere
+La stessa funzione javascript confirmRemoteAction() utilizzata in precedenza puo' essere
 invocata anche qui per richiedere la conferma dell'utente prima dell'esecuzione::
 
     <a href=""
-       onclick="deleteRemoteObject('{{object|clone_object_url}}', 'Duplicating {{object}}', afterObjectClone); return false;">
+       onclick="confirmRemoteAction('{{object|clone_object_url}}', 'Duplicating {{object}}', afterObjectClone); return false;">
         <i class="fa fa-clone"></i> Duplicate
     </a>
 
 
-.. figure:: /_static/images/objects_table.png
+Checking user permissions
+-------------------------
+
+Tutte le viste utilizzate sin qui per manipolare i Models sono gia' protette in
+termine di permissions accordate all'utente; in caso di violazione, viene lanciata l'eccezione PermissionDenied, e il front-end
+visualizza un server error.
+
+In alternativa, possiamo inibire o nascondere i controlli di editing dalla pagina
+quanto l'utente loggato non e' autorizzato alle operazioni.
+
+Il seguente template tag consente di verificare se l'utente e' autorizzato o meno
+ad eseguire le azioni:
+
+- add
+- change
+- delete
+- view (Django >= 2.1 only)
+
+.. code:: python
+
+    @register.simple_tag(takes_context=True)
+    def testhasperm(context, model, action):
+        """
+        Returns True iif the user have the specified permission over the model.
+        """
+        user = context['request'].user
+        app_label = model._meta.app_label
+        model_name = model._meta.model_name
+        required_permission = '%s.%s_%s' % (app_label, action, model_name)
+        return user.is_authenticated and user.has_perm(required_permission)
+
+e puo' essere utilizzata assegnato il valore calcolato a una variabile::
+
+    {% testhasperm model 'view' as can_view_objects %}
+    {% if not can_view_objects %}
+        <h2>Sorry, you have no permission to view these objects</h2>
+    {% endif %}
+
+Un'altra possibilita' e' quella di utilizzare un template tag "ishasperm" per
+condizionare l'inclusione del controllo::
+
+    {% ifhasperm model 'change' %}
+        <a href=""
+           data-action="{{model|change_model_url:object.id}}"
+           onclick="openModalDialogWithForm(event, '#modal_generic', null, afterObjectChangeSuccess); return false;"
+           data-title="Update {{ model|model_verbose_name }}: {{ object }}">
+            <i class="fa fa-edit"></i> Edit
+        </a>
+        |
+    {% endifhasperm %}
+
+dove:
+
+.. code:: python
+
+    @register.tag
+    def ifhasperm(parser, token):
+        """
+        Check user permission over specified model.
+        (You can specify either a model or an object).
+        """
+
+        # Separating the tag name from the parameters
+        try:
+            tag, model, action = token.contents.split()
+        except (ValueError, TypeError):
+            raise template.TemplateSyntaxError(
+                "'%s' tag takes three parameters" % tag)
+
+        default_states = ['ifhasperm', 'else']
+        end_tag = 'endifhasperm'
+
+        # Place to store the states and their values
+        states = {}
+
+        # Let's iterate over our context and find our tokens
+        while token.contents != end_tag:
+            current = token.contents
+            states[current.split()[0]] = parser.parse(default_states + [end_tag])
+            token = parser.next_token()
+
+        model_var = parser.compile_filter(model)
+        action_var = parser.compile_filter(action)
+        return CheckPermNode(states, model_var, action_var)
+
+
+    class CheckPermNode(template.Node):
+        def __init__(self, states, model_var, action_var):
+            self.states = states
+            self.model_var = model_var
+            self.action_var = action_var
+
+        def render(self, context):
+
+            # Resolving variables passed by the user
+            model = self.model_var.resolve(context)
+            action = self.action_var.resolve(context)
+
+            # Check user permission
+            if testhasperm(context, model, action):
+                html = self.states['ifhasperm'].render(context)
+            else:
+                html = self.states['else'].render(context) if 'else' in self.states else ''
+
+            return html
+
+.. figure:: /_static/images/check_user_permissions.png
 

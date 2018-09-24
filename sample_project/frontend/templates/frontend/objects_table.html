@@ -4,6 +4,7 @@
 
 {% block content %}
 
+
     <div class="row">
 
         {% block pagetitle %}
@@ -11,55 +12,97 @@
 
         <div class="col-sm-12">
             <h1>{{ model|model_verbose_name_plural }}</h1>
-            {% if not objects %}
-                <div>No objects available yet</div>
-            {% else %}
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Tools</th>
-                            {% block table_headers %}
-                            {% endblock table_headers %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for object in objects %}
-                        <tr>
-                            <td style="white-space: nowrap;">
-                                <a href=""
-                                   data-action="{{model|change_model_url:object.id}}"
-                                   onclick="openModalDialogWithForm(event, '#modal_generic', null, afterObjectChangeSuccess); return false;"
-                                   data-title="Update {{ model|model_verbose_name }}: {{ object }}">
-                                    <i class="fa fa-edit"></i> Edit
-                                </a>
-                                |
-                                <a href=""
-                                   onclick="deleteRemoteObject('{{object|delete_object_url}}', 'Deleting {{object}}', afterObjectDelete); return false;">
-                                    <i class="fa fa-eraser"></i> Delete
-                                </a>
-                                |
-                                <a href=""
-                                   onclick="deleteRemoteObject('{{object|clone_object_url}}', 'Duplicating {{object}}', afterObjectClone); return false;">
-                                    <i class="fa fa-clone"></i> Duplicate
-                                </a>
-                            </td>
-                            {% block table_row %}
-                            {% endblock table_row %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
+
             <div>
-                <button
-                    href=""
-                    data-action="{{model|add_model_url}}"
-                    data-title="New {{ model|model_verbose_name }}"
-                    onclick="openModalDialogWithForm(event, '#modal_generic', null, afterObjectAddSuccess); return false;"
-                    type="button"class="btn btn-primary">
-                    New
-                </button>
+                {% ifhasperm model 'view' %}
+                    <div style="color: #090">User can view objects</div>
+                {% else %}
+                    <div style="color: #900">User cannot view objects</div>
+                {% endifhasperm %}
+
+                {% ifhasperm model 'add' %}
+                    <div style="color: #090">User can add objects</div>
+                {% else %}
+                    <div style="color: #900">User cannot add objects</div>
+                {% endifhasperm %}
+
+                {% ifhasperm model 'change' %}
+                    <div style="color: #090">User can change objects</div>
+                {% else %}
+                    <div style="color: #900">User cannot change objects</div>
+                {% endifhasperm %}
+
+                {% ifhasperm model 'delete' %}
+                    <div style="color: #090">User can delete objects</div>
+                {% else %}
+                    <div style="color: #900">User cannot delete objects</div>
+                {% endifhasperm %}
             </div>
+
+
+            {% testhasperm model 'view' as can_view_objects %}
+            {% if not can_view_objects %}
+                <h2>Sorry, you have no permission to view these objects</h2>
+            {% else %}
+                {% if not objects %}
+                    <h2>No objects available yet</h2>
+                {% else %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Tools</th>
+                                {% block table_headers %}
+                                {% endblock table_headers %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for object in objects %}
+                            <tr>
+                                <td style="white-space: nowrap;">
+                                    {% ifhasperm model 'change' %}
+                                        <a href=""
+                                           data-action="{{model|change_model_url:object.id}}"
+                                           onclick="openModalDialogWithForm(event, '#modal_generic', null, afterObjectChangeSuccess); return false;"
+                                           data-title="Update {{ model|model_verbose_name }}: {{ object }}">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+                                        |
+                                    {% endifhasperm %}
+                                    {% ifhasperm model 'delete' %}
+                                        <a href=""
+                                           onclick="confirmRemoteAction('{{object|delete_object_url}}', 'Deleting {{object|escapejs}}', afterObjectDelete); return false;">
+                                            <i class="fa fa-eraser"></i> Delete
+                                        </a>
+                                        |
+                                    {% endifhasperm %}
+                                    {% ifhasperm model 'add' %}
+                                        <a href=""
+                                           onclick="confirmRemoteAction('{{object|clone_object_url}}', 'Duplicating {{object|escapejs}}', afterObjectClone); return false;">
+                                            <i class="fa fa-clone"></i> Duplicate
+                                        </a>
+                                        |
+                                    {% endifhasperm %}
+                                </td>
+                                {% block table_row %}
+                                {% endblock table_row %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+                <div>
+                    {% ifhasperm model 'add' %}
+                        <button
+                            href=""
+                            data-action="{{model|add_model_url}}"
+                            data-title="New {{ model|model_verbose_name }}"
+                            onclick="openModalDialogWithForm(event, '#modal_generic', null, afterObjectAddSuccess); return false;"
+                            type="button"class="btn btn-primary">
+                            New
+                        </button>
+                    {% endifhasperm %}
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock content %}

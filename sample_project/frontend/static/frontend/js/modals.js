@@ -146,3 +146,35 @@ function openModalDialogWithForm(event, modal, cbAfterLoad, cbAfterSuccess) {
     });
 }
 
+
+/**
+ * Invoke remote action upon user confirmation.
+ *
+ * Display a dialog to ask for user confirmation, then invoke remote action;
+ * after successfull execution, call supplied callback with server result.
+ *
+ * @param {string}              url         Server action to be invoked.
+ * @param {string}              title       Title for confirmation modal dialog.
+ * @param {afterDoneCallback}   [function]  Callback to be invoked after successfull execution.
+ *
+ * @return {none}
+ */
+
+function confirmRemoteAction(url, title, afterDoneCallback) {
+    var modal = $('#modal_confirm');
+    modal.find('.modal-body p').text(title);
+    modal.find('.btn-yes').off().on('click', function() {
+        // User selected "Yes", so proceed with remote call
+        $.ajax({
+            type: 'GET',
+            url: url
+        }).done(function(data) {
+            if (afterDoneCallback) {
+                afterDoneCallback(data);
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert('SERVER ERROR: ' + errorThrown);
+        });
+    });
+    modal.modal('show');
+}
