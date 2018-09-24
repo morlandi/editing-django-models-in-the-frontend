@@ -117,6 +117,7 @@ def clone_model_url(model, object_id):
 def testhasperm(context, model, action):
     """
     Returns True iif the user have the specified permission over the model.
+    For 'model', we accept either a Model class, or a string formatted as "app_label.model_name".
 
     Sample usage:
 
@@ -126,8 +127,11 @@ def testhasperm(context, model, action):
         {% endif %}
     """
     user = context['request'].user
-    app_label = model._meta.app_label
-    model_name = model._meta.model_name
+    if isinstance(model, str):
+        app_label, model_name = model.split('.')
+    else:
+        app_label = model._meta.app_label
+        model_name = model._meta.model_name
     required_permission = '%s.%s_%s' % (app_label, action, model_name)
     return user.is_authenticated and user.has_perm(required_permission)
 
