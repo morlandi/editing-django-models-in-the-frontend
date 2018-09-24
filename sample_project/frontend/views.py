@@ -1,4 +1,5 @@
 import time
+from django.apps import apps
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponse
@@ -278,3 +279,35 @@ def generic_edit_view(request, model_form_class, pk=None):
         'object': object,
         'form': form,
     })
+
+
+################################################################################
+# Deleting an object
+
+def delete_object(request, app_label, model_name, pk):
+
+    required_permission = '%s.delete_%s' % (app_label, model_name)
+    if not request.user.is_authenticated or not request.user.has_perm(required_permission):
+        raise PermissionDenied
+
+    model = apps.get_model(app_label, model_name)
+    object = get_object_by_uuid_or_404(model, pk)
+    object_id = object.id
+    object.delete()
+
+    return HttpResponse(object_id)
+
+
+################################################################################
+# Cloning an object
+
+def clone_object(request, app_label, model_name, pk):
+
+    required_permission = '%s.add_%s' % (app_label, model_name)
+    if not request.user.is_authenticated or not request.user.has_perm(required_permission):
+        raise PermissionDenied
+
+    model = apps.get_model(app_label, model_name)
+    object = get_object_by_uuid_or_404(model, pk)
+    new_object = object.clone(request)
+    return HttpResponse(new_object.id)

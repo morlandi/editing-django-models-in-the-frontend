@@ -60,4 +60,8 @@ urlpatterns = [
     # Edit any object
     path('object/<str:app_label>/<str:model_name>/add/', views.edit_object, name="object-add"),
     path('object/<str:app_label>/<str:model_name>/<uuid:pk>/change/', views.edit_object, name="object-change"),
+
+    # Delete and clone
+    path('object/<str:app_label>/<str:model_name>/<uuid:pk>/delete/', views.delete_object, name="object-delete"),
+    path('object/<str:app_label>/<str:model_name>/<uuid:pk>/clone/', views.clone_object, name="object-clone"),
 ]

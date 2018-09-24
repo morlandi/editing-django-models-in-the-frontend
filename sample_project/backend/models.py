@@ -1,7 +1,9 @@
 import uuid
+from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from .utils import increment_revision
 
 
 class BaseModel(models.Model):
@@ -48,3 +50,14 @@ class Song(BaseModel):
     class Meta(BaseModel.Meta):
         abstract = False
         ordering = ['position', ]
+
+    def clone(self, request=None):
+
+        if request and not request.user.has_perm('backend.add_song'):
+            raise PermissionDenied
+
+        obj = Song.objects.get(id=self.id)
+        obj.pk = uuid.uuid4()
+        obj.description = increment_revision(self.description)
+        obj.save()
+        return obj

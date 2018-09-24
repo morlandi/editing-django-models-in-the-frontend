@@ -6,10 +6,10 @@
 
     <div class="row">
 
-        {% block title %}
-        {% endblock title %}
+        {% block pagetitle %}
+        {% endblock pagetitle %}
 
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <h1>{{ model|model_verbose_name_plural }}</h1>
             {% if not objects %}
                 <div>No objects available yet</div>
@@ -25,17 +25,22 @@
                     <tbody>
                         {% for object in objects %}
                         <tr>
-                            <td>
+                            <td style="white-space: nowrap;">
                                 <a href=""
                                    data-action="{{model|change_model_url:object.id}}"
-                                   onclick="openModalDialogWithForm(event, '#modal_generic', null, function() {location.reload(true);}); return false;"
-                                   data-title="Update {{ model|model_verbose_name }}: {{ object }}"
-                                >
+                                   onclick="openModalDialogWithForm(event, '#modal_generic', null, afterObjectChangeSuccess); return false;"
+                                   data-title="Update {{ model|model_verbose_name }}: {{ object }}">
                                     <i class="fa fa-edit"></i> Edit
                                 </a>
                                 |
-                                <a href="{{model|change_model_url:object.id}}">
-                                    <i class="fa fa-edit"></i> Edit (standalone)
+                                <a href=""
+                                   onclick="deleteRemoteObject('{{object|delete_object_url}}', 'Deleting {{object}}', afterObjectDelete); return false;">
+                                    <i class="fa fa-eraser"></i> Delete
+                                </a>
+                                |
+                                <a href=""
+                                   onclick="deleteRemoteObject('{{object|clone_object_url}}', 'Duplicating {{object}}', afterObjectClone); return false;">
+                                    <i class="fa fa-clone"></i> Duplicate
                                 </a>
                             </td>
                             {% block table_row %}
@@ -50,7 +55,7 @@
                     href=""
                     data-action="{{model|add_model_url}}"
                     data-title="New {{ model|model_verbose_name }}"
-                    onclick="openModalDialogWithForm(event, '#modal_generic', null, function() {location.reload(true);}); return false;"
+                    onclick="openModalDialogWithForm(event, '#modal_generic', null, afterObjectAddSuccess); return false;"
                     type="button"class="btn btn-primary">
                     New
                 </button>
@@ -59,3 +64,35 @@
     </div>
 {% endblock content %}
 
+
+{% block extrajs %}
+
+    <script language="javascript">
+
+        function afterObjectChangeSuccess(modal) {
+            var object_id = modal.find('input[name=object_id]').val();
+            console.log(object_id);
+            location.reload(true);
+        }
+
+        function afterObjectAddSuccess(modal) {
+            // Same as "change"
+            afterObjectChangeSuccess(modal);
+        }
+
+        function afterObjectDelete(object_id) {
+            console.log('deleted: %o', object_id);
+            location.reload(true);
+        }
+
+        function afterObjectClone(object_id) {
+            console.log('cloned: %o', object_id);
+            location.reload(true);
+        }
+
+        $( document ).ready(function() {
+        });
+
+    </script>
+
+{% endblock extrajs %}

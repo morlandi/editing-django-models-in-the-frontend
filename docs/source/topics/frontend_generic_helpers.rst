@@ -13,15 +13,14 @@ alcune istruzioni piuttosto ripetitive:
 - i templates in cui inserire i link richiesti, che saranno presumibilmente
   analoghi a quelli gia' realizzati per altri Models.
 
-Se il front-end prevede un numero limitato di Models, puo' essere ragionevole
-accettare queste ripetizioni;
+Se il front-end prevede un numero limitato di Models, e' ragionevole accettare queste ripetizioni;
 in caso contrario puo' valere la pena ricorrere anche lato front-end a soluzioni piu' generiche.
 
 .. note:: Check sample code at:  (10) Front-end generic helpers to work with any Model
 
 
-Generic urls
-------------
+Generic end-points for changing and adding an object
+----------------------------------------------------
 
 Possiamo definire due end-point del tutto generici richiedento come paramteri
 **app_label** e **model_name** per individuare il Model richiesto;
@@ -186,4 +185,119 @@ e riscrivere il template piu' semplicemente come segue::
 
     {# add object #}
     data-action="{{model|add_model_url}}"
+
+
+Deleting an object
+------------------
+
+Associamo all'url::
+
+    path('object/<str:app_label>/<str:model_name>/<uuid:pk>/delete/', views.delete_object, name="object-delete"),
+
+una view responsabile eseguire la cancellazione di un generico oggetto:
+
+.. code:: python
+
+    ################################################################################
+    # Deleting an object
+
+    def delete_object(request, app_label, model_name, pk):
+
+        required_permission = '%s.delete_%s' % (app_label, model_name)
+        if not request.user.is_authenticated or not request.user.has_perm(required_permission):
+            raise PermissionDenied
+
+        model = apps.get_model(app_label, model_name)
+        object = get_object_by_uuid_or_404(model, pk)
+        object_id = object.id
+        object.delete()
+
+        return HttpResponse(object_id)
+
+Verra' invocata via Ajax da una funzione accessoria che chiede preventivamente
+la conferma dell'utente:
+
+
+.. code:: javascript
+
+    function deleteRemoteObject(url, title, afterObjectDeleteCallback) {
+        var modal = $('#modal_confirm');
+        modal.find('.modal-title').text(title);
+        modal.find('.btn-yes').off().on('click', function() {
+            // User selected "Yes", so proceed with remote call
+            $.ajax({
+                type: 'GET',
+                url: url
+            }).done(function(data) {
+                if (afterObjectDeleteCallback) {
+                    afterObjectDeleteCallback(data);
+                }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                alert('SERVER ERROR: ' + errorThrown);
+            });
+        });
+        modal.modal('show');
+    }
+
+e quindi, nel template::
+
+    <a href=""
+       onclick="deleteRemoteObject('{{object|delete_object_url}}', 'Deleting {{object}}', afterObjectDelete); return false;">
+        <i class="fa fa-eraser"></i> Delete
+    </a>
+
+dove afterObjectDelete() per semplicita' si limita a ricaricare la pagina.
+
+
+Cloning an object
+-----------------
+
+Analogamente, possiamo predisporre una view che duplica un oggetto esistente:
+
+.. code:: python
+
+    ################################################################################
+    # Cloning an object
+
+    def clone_object(request, app_label, model_name, pk):
+
+        required_permission = '%s.add_%s' % (app_label, model_name)
+        if not request.user.is_authenticated or not request.user.has_perm(required_permission):
+            raise PermissionDenied
+
+        model = apps.get_model(app_label, model_name)
+        object = get_object_by_uuid_or_404(model, pk)
+        new_object = object.clone(request)
+        return HttpResponse(new_object.id)
+
+Qui stiamo supponendo che il Model metta a disposizione un opportuno metodo **clone()**:
+
+.. code:: python
+
+
+    class Song(BaseModel):
+
+        ...
+
+        def clone(self, request=None):
+
+            if request and not request.user.has_perm('backend.add_song'):
+                raise PermissionDenied
+
+            obj = Song.objects.get(id=self.id)
+            obj.pk = uuid.uuid4()
+            obj.description = increment_revision(self.description)
+            obj.save()
+            return obj
+
+La stessa funzione javascript deleteRemoteObject() utilizzata in precedenza puo' essere
+invocata anche qui per richiedere la conferma dell'utente prima dell'esecuzione::
+
+    <a href=""
+       onclick="deleteRemoteObject('{{object|clone_object_url}}', 'Duplicating {{object}}', afterObjectClone); return false;">
+        <i class="fa fa-clone"></i> Duplicate
+    </a>
+
+
+.. figure:: /_static/images/objects_table.png
 

@@ -18,12 +18,9 @@ evolve our code to provide similar functionalities:
 
     Support for autocompletion
 
-    Aids for deleting the object (and eventually all related objects)
-
 Minor issues:
 
 - Add a localized datepicker in the examples
-- Give an example for object deletion (upon confirmation)
 - Add a ModelMultipleChoiceField (with multiSelect javascript widget) example in the sample project
 - Accept and optional "next" parameter for redirection after successfull form submission (for standalone pages only)
 
