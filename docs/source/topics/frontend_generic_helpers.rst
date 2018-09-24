@@ -14,7 +14,8 @@ alcune istruzioni piuttosto ripetitive:
   analoghi a quelli gia' realizzati per altri Models.
 
 Se il front-end prevede un numero limitato di Models, e' ragionevole accettare queste ripetizioni;
-in caso contrario puo' valere la pena ricorrere anche lato front-end a soluzioni piu' generiche.
+in caso contrario puo' essere giustificato affrontare la complicazione di introdurre anche lato
+front-end soluzioni piu' generiche.
 
 .. note:: Check sample code at:  (10) Front-end generic helpers to work with any Model
 
@@ -86,7 +87,7 @@ file `frontend/forms.py`
         return _ObjectForm
 
 Il template utilizzato per il rendering della pagina puo' utilizzare i nuovi urls generici,
-nell'ipotesi che il context ricevuto sia stato annotato con la variabile **model**::
+nell'ipotesi che il context ricevuto sia stato annotato allo scopo con la variabile **model**::
 
     {# change object #}
     data-action="{% url 'frontend:object-change' model|app_label model|model_name object.id %}"
@@ -94,8 +95,9 @@ nell'ipotesi che il context ricevuto sia stato annotato con la variabile **model
     {# add object #}
     data-action="{% url 'frontend:object-add' model|app_label model|model_name %}"
 
-Per estrarre **app_label** e **model_name** e altre informazioni "meta" da **model**
-e' necessario predisporre alcuni semplici template_tags:
+Sfortunatamente per estrarre **app_label** e **model_name** e altre informazioni accessorie
+da **model** e' necessario predisporre alcuni semplici template_tags, poiche'
+l'attributo `_meta` del model non e' direttamente accessibile nel contesto del template:
 
 file `frontend/template_tags/frontend_tags.py`
 
@@ -196,7 +198,7 @@ Associamo all'url::
 
     path('object/<str:app_label>/<str:model_name>/<uuid:pk>/delete/', views.delete_object, name="object-delete"),
 
-una view responsabile eseguire la cancellazione di un generico oggetto:
+una view responsabile di eseguire la cancellazione di un generico oggetto:
 
 .. code:: python
 
@@ -216,7 +218,7 @@ una view responsabile eseguire la cancellazione di un generico oggetto:
 
         return HttpResponse(object_id)
 
-Verra' invocata via Ajax da una funzione accessoria che chiede preventivamente
+Verra' invocata via Ajax da una funzione javascript accessoria che chiede preventivamente
 la conferma dell'utente:
 
 
@@ -250,6 +252,8 @@ e quindi, nel template::
 
 dove afterObjectDelete() per semplicita' si limita a ricaricare la pagina.
 
+.. figure:: /_static/images/confirm_deletion.png
+   :scale: 80 %
 
 Cloning an object
 -----------------
