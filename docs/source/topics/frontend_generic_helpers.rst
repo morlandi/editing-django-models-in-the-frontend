@@ -276,7 +276,10 @@ Analogamente, possiamo predisporre una view che duplica un oggetto esistente:
         new_object = object.clone(request)
         return HttpResponse(new_object.id)
 
-Qui stiamo supponendo che il Model metta a disposizione un opportuno metodo **clone()**:
+Qui stiamo supponendo che il Model metta a disposizione un opportuno metodo **clone()**;
+conviene delegare questa attivita' allo specifico Model, che si preoccupera'
+di gestire opportunamente le proprie eventuali relazioni M2M, ed eseguire eventuali
+elaborazioni accessorie (rinumerazione del campo `position`, etc):
 
 .. code:: python
 
@@ -336,7 +339,8 @@ ad eseguire le azioni:
         required_permission = '%s.%s_%s' % (app_label, action, model_name)
         return user.is_authenticated and user.has_perm(required_permission)
 
-e puo' essere utilizzata assegnato il valore calcolato a una variabile::
+e puo' essere utilizzata assegnato il valore calcolato ad una variabile
+per i successivi test::
 
     {% testhasperm model 'view' as can_view_objects %}
     {% if not can_view_objects %}
