@@ -275,7 +275,7 @@ interfaccia di amministrazione di Django, e' molto interessante in applicazioni
 fortemente orientate alla gestione dati, perche' consente all'utilizzatore un
 notevole risparmio di tempo quando e' richiesto l'interimento di dati ripetitivi.
 
-In sostanza consente di definire valori di default "opportuni" in modo arbitrario.
+In sostanza consente di fornire caso per caso valori di default "opportuni" in modo arbitrario.
 
 Possiamo predisporre una view che duplica un oggetto esistente analogamente a
 quanto gia' fatto per la cancellazione:
