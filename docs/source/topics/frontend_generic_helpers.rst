@@ -151,6 +151,16 @@ forniscono direttamente il link "canonico":
 .. code:: python
 
     @register.filter
+    def add_model_url(model):
+        """
+        Given a model, return the "canonical" url for adding a new object:
+
+            <a href="{{model|add_model_url}}">add a new object</a>
+        """
+        return reverse('frontend:object-add', args=(model._meta.app_label, model._meta.model_name))
+
+
+    @register.filter
     def change_object_url(object):
         """
         Given an object, returns the "canonical" url for object editing:
@@ -171,22 +181,18 @@ forniscono direttamente il link "canonico":
         return reverse('frontend:object-change', args=(model._meta.app_label, model._meta.model_name, object_id))
 
 
-    @register.filter
-    def add_model_url(model):
-        """
-        Given a model, return the "canonical" url for adding a new object:
-
-            <a href="{{model|add_model_url}}">add a new object</a>
-        """
-        return reverse('frontend:object-add', args=(model._meta.app_label, model._meta.model_name))
-
 e riscrivere il template piu' semplicemente come segue::
+
+    {# add object #}
+    data-action="{{model|add_model_url}}"
 
     {# change object #}
     data-action="{{model|change_model_url:object.id}}"
 
-    {# add object #}
-    data-action="{{model|add_model_url}}"
+    oppure:
+
+    {# change object #}
+    data-action="{{object|change_object_url}}"
 
 
 Deleting an object
