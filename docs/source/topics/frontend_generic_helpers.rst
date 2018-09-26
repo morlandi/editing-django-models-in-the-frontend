@@ -258,7 +258,15 @@ dove afterObjectDelete() per semplicita' si limita a ricaricare la pagina.
 Cloning an object
 -----------------
 
-Analogamente, possiamo predisporre una view che duplica un oggetto esistente:
+La possibilita' di duplicare un oggetto esistente, normalmente non prevista dalla
+interfaccia di amministrazione di Django, e' molto interessante in applicazioni
+fortemente orientate alla gestione dati, perche' consente all'utilizzatore un
+notevole risparmio di tempo quando e' richiesto l'interimento di dati ripetitivi.
+
+In sostanza consente di definire valori di default "opportuni" in modo arbitrario.
+
+Possiamo predisporre una view che duplica un oggetto esistente analogamente a
+quanto gia' fatto per la cancellazione:
 
 .. code:: python
 
@@ -298,6 +306,13 @@ elaborazioni accessorie (rinumerazione del campo `position`, etc):
             obj.description = increment_revision(self.description)
             obj.save()
             return obj
+
+.. warning:: Supply a default generic clone procedure when the Model doesn't provide it's own
+
+Per duplicare anche le eventuali relazioni, vedere:
+
+https://docs.djangoproject.com/en/1.10/topics/db/queries/#copying-model-instances
+
 
 La stessa funzione javascript confirmRemoteAction() utilizzata in precedenza puo' essere
 invocata anche qui per richiedere la conferma dell'utente prima dell'esecuzione::
