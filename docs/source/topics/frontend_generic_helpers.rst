@@ -256,7 +256,13 @@ e quindi, nel template::
         <i class="fa fa-eraser"></i> Delete
     </a>
 
-dove afterObjectDelete() per semplicita' si limita a ricaricare la pagina.
+La callback opzionale **afterObjectDelete()** viene invocata dopo l'effettiva cancellazione,
+ricevendo l'id dell'oggetto eliminato.
+
+Nel progetto d'esempio, per semplicita', si limita a ricaricare la pagina,
+mentre in casi applicativi reali verra' convenientemente utilizzata
+per aggiornare "chirurgicamente" la pagina esistente.
+
 
 .. figure:: /_static/images/confirm_deletion.png
    :scale: 80 %
@@ -327,6 +333,8 @@ invocata anche qui per richiedere la conferma dell'utente prima dell'esecuzione:
        onclick="confirmRemoteAction('{{object|clone_object_url}}', 'Duplicating {{object}}', afterObjectClone); return false;">
         <i class="fa fa-clone"></i> Duplicate
     </a>
+
+La callback **afterObjectClone()** riceve l'id dell'oggetto creato.
 
 
 Checking user permissions
