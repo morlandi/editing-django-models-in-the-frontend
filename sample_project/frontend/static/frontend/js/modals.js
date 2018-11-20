@@ -20,6 +20,10 @@ function initModalDialog(event, modal_element) {
         </a>
     */
     var modal = $(modal_element);
+    if (modal.length <= 0) {
+        console.log('ERROR: modal "%o" not found', modal_element);
+        display_server_error(sprintf('ERROR: modal "%s" not found', modal_element));
+    }
     var target = $(event.target);
 
     var title = target.data('title') || '';
@@ -173,8 +177,15 @@ function confirmRemoteAction(url, title, afterDoneCallback) {
                 afterDoneCallback(data);
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            alert('SERVER ERROR: ' + errorThrown);
+            display_server_error(errorThrown);
         });
     });
     modal.modal('show');
 }
+
+
+function display_server_error(errorThrown) {
+    alert('SERVER ERROR: ' + errorThrown);
+}
+
+

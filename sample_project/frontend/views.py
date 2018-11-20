@@ -194,7 +194,7 @@ def artist_edit(request, pk=None):
         template_name = 'frontend/includes/generic_form.html'
 
     if request.method == 'POST':
-        form = ArtistUpdateForm(instance=object, data=request.POST)
+        form = ArtistEditForm(instance=object, data=request.POST)
         if form.is_valid():
             object = form.save()
             if not request.is_ajax():
@@ -208,7 +208,7 @@ def artist_edit(request, pk=None):
                 return HttpResponseRedirect(next)
             # if is_ajax(), we just return the validated form, so the modal will close
     else:
-        form = ArtistUpdateForm(instance=object)
+        form = ArtistEditForm(instance=object)
 
     return render(request, template_name, {
         'object': object,
