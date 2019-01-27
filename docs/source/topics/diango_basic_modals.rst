@@ -49,7 +49,7 @@ minimo di informazioni accessorie:
        data-icon="fa-keyboard-o"
        data-button-save-label="Save"
        onclick="openModalDialog(event, '#modal_generic'); return false;">
-        <i class="fa fa-keyboard-o"></i> Open generic modal (no contents)
+        <i class="fa fa-keyboard-o" style="pointer-events: none;"></i> Open generic modal (no contents)
     </a>
 
 .. figure:: /_static/images/empty_modal_customized.png
@@ -79,7 +79,7 @@ nel template della pagina principale, e quindi utilizzandone il contesto:
                    data-icon="fa-keyboard-o"
                    data-button-save-label="Save"
                    onclick="openModalDialog(event, '#modal_generic'); return false;">
-                    <i class="fa fa-keyboard-o"></i> Open generic modal (no contents)
+                    <i class="fa fa-keyboard-o" style="pointer-events: none;"></i> Open generic modal (no contents)
                 </a>
             */
             var modal = $(modal_element);
